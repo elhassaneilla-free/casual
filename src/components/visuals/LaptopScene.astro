@@ -1,0 +1,246 @@
+---
+
+---
+
+<div
+  id="laptop-scene-container"
+  class="w-full h-full min-h-[400px] flex items-center justify-center relative z-10"
+>
+</div>
+
+<script>
+  import * as THREE from "three";
+
+  let cleanupFn;
+
+  document.addEventListener("astro:page-load", () => {
+    // Cleanup previous instance if exists
+    if (cleanupFn) {
+      cleanupFn();
+      cleanupFn = null;
+    }
+
+    // Initialize Scene
+    const container = document.getElementById("laptop-scene-container");
+
+    if (!container) return; // Not on the page that has this component or component hidden
+
+    const scene = new THREE.Scene();
+
+    // Camera setup
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      100
+    );
+    camera.position.set(0, 1.5, 5);
+    camera.lookAt(0, 0, 0);
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    // Lights - High Visibility Setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    mainLight.position.set(5, 10, 7);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
+
+    const fillLight = new THREE.DirectionalLight(0xebf4ff, 0.8);
+    fillLight.position.set(-5, 5, 5);
+    scene.add(fillLight);
+
+    // Rim Light for edge definition
+    const rimLight = new THREE.SpotLight(0x635bff, 5);
+    rimLight.position.set(-5, 2, -5);
+    rimLight.lookAt(0, 0, 0);
+    scene.add(rimLight);
+
+    // Screen Glow
+    const screenLight = new THREE.PointLight(0x00ff00, 0.5, 3);
+    screenLight.position.set(0, 0.5, -0.5);
+    scene.add(screenLight);
+
+    // --- Laptop Construction ---
+    const laptopGroup = new THREE.Group();
+
+    // Materials
+    const caseMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4a4a5e, // Lighter, visible gray
+      roughness: 0.3,
+      metalness: 0.5,
+    });
+
+    const darkMaterial = new THREE.MeshStandardMaterial({
+      color: 0x222222,
+      roughness: 0.6,
+      metalness: 0.2,
+    });
+
+    // Matrix Screen Texture Setup
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 320;
+    const ctx = canvas.getContext("2d");
+
+    // Matrix effect vars
+    const columns = Math.floor(canvas.width / 14);
+    const drops: number[] = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.random() * -100;
+    }
+
+    const updateScreenTexture = () => {
+      if (!ctx) return;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0f0";
+      ctx.font = "14px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = Math.random() > 0.5 ? "1" : "0";
+        const x = i * 14;
+        const y = drops[i] * 14;
+
+        ctx.fillStyle = `rgba(0, 255, 50, ${Math.random() * 0.5 + 0.5})`;
+        ctx.fillText(text, x, y);
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      if (screenTexture) screenTexture.needsUpdate = true;
+    };
+
+    const screenTexture = new THREE.CanvasTexture(canvas);
+    const screenMaterial = new THREE.MeshBasicMaterial({
+      map: screenTexture,
+      color: 0xffffff,
+    });
+
+    // 1. Base Shell
+    const baseW = 3;
+    const baseH = 0.15;
+    const baseD = 2;
+
+    const baseGeo = new THREE.BoxGeometry(baseW, baseH, baseD);
+    const baseMesh = new THREE.Mesh(baseGeo, caseMaterial);
+    baseMesh.position.y = -baseH / 2;
+    baseMesh.receiveShadow = true;
+    baseMesh.castShadow = true;
+    laptopGroup.add(baseMesh);
+
+    // 1.1 Keyboard Area (Recessed or just keys)
+    const keyboardGroup = new THREE.Group();
+    const keyGeo = new THREE.BoxGeometry(0.18, 0.05, 0.18);
+
+    // Simple 6-row layout
+    const rows = 6;
+    const cols = 14;
+    const startX = -(cols * 0.2) / 2 + 0.1;
+    const startZ = -(rows * 0.2) / 2 - 0.2; // Shifted slightly back
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        // Skip some keys to make it look like a layout (optional, but pure grid is fine/techy)
+        const key = new THREE.Mesh(keyGeo, darkMaterial);
+        key.position.set(startX + c * 0.2, 0.02, startZ + r * 0.2); // Sits on top
+        keyboardGroup.add(key);
+      }
+    }
+    laptopGroup.add(keyboardGroup);
+
+    // 1.2 Touchpad
+    const trackpadGeo = new THREE.BoxGeometry(1, 0.02, 0.6);
+    const trackpad = new THREE.Mesh(trackpadGeo, darkMaterial);
+    trackpad.position.set(0, 0.011, 0.6); // Front area
+    laptopGroup.add(trackpad);
+
+    // 2. Screen (Lid)
+    const screenPivot = new THREE.Group();
+    screenPivot.position.set(0, 0, -1); // Hinge at back
+
+    const lidThick = 0.1;
+    const lidH = 2;
+    const lidGeo = new THREE.BoxGeometry(baseW, lidH, lidThick);
+    const lidMesh = new THREE.Mesh(lidGeo, caseMaterial);
+    lidMesh.position.set(0, lidH / 2, 0);
+    lidMesh.castShadow = true;
+
+    // Screen Bezel/Display
+    const displayW = baseW - 0.2;
+    const displayH = lidH - 0.3;
+    const displayGeo = new THREE.PlaneGeometry(displayW, displayH);
+    const displayMesh = new THREE.Mesh(displayGeo, screenMaterial);
+    displayMesh.position.set(0, lidH / 2, lidThick / 2 + 0.01);
+
+    screenPivot.add(lidMesh);
+    screenPivot.add(displayMesh);
+
+    // Set Open Angle
+    screenPivot.rotation.x = 0.25;
+
+    laptopGroup.add(screenPivot);
+
+    scene.add(laptopGroup);
+
+    // Floating Animation
+    let time = 0;
+    let animationId;
+
+    const animate = () => {
+      animationId = requestAnimationFrame(animate);
+      time += 0.01;
+
+      // Gentle float
+      laptopGroup.position.y = Math.sin(time) * 0.1;
+      laptopGroup.rotation.y = Math.sin(time * 0.5) * 0.1; // Slow turn
+
+      // Update Matrix Screen
+      updateScreenTexture();
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Handle Resize
+    const resizeObserver = new ResizeObserver(() => {
+      if (!container) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+
+    resizeObserver.observe(container);
+
+    // Assign cleanup function to be called on next page load or unmount
+    cleanupFn = () => {
+      if (animationId) cancelAnimationFrame(animationId);
+      resizeObserver.disconnect();
+      if (
+        renderer &&
+        renderer.domElement &&
+        container.contains(renderer.domElement)
+      ) {
+        container.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+      // Optional: Dispose geometries/materials if needed for heavy memory
+    };
+  });
+</script>
+```

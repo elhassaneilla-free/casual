@@ -1,0 +1,206 @@
+---
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+
+import LaptopScene from "../visuals/LaptopScene.astro";
+
+const content = {
+  en: {
+    greeting: "Hello, I’m … hold on, welcome to my world first.",
+    title:
+      "IT Support & Networking Specialist / Sys Admin / Junior Front-End Angular Developer",
+    subtitle: "A unique and exclusive perspective.",
+    cta: "View My Work",
+    contact: "Contact Me",
+  },
+  fr: {
+    greeting: "Bonjour, je suis… attendez, bienvenue dans mon monde d'abord.",
+    title:
+      "Spécialiste Support IT & Réseaux / Admin Sys / Développeur Front-End Angular Junior",
+    subtitle: "Une perspective unique et exclusive.",
+    cta: "Voir mes projets",
+    contact: "Me contacter",
+  },
+};
+
+const text = content[lang] !== undefined ? content[lang] : content.en;
+---
+
+<section
+  class="relative min-h-[calc(100vh-5rem)] flex items-center py-32 overflow-hidden"
+>
+  <!-- Background Image & Overlay -->
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute inset-0 bg-[url('/my-small-world.jpg')] bg-cover bg-center"
+    >
+    </div>
+    <!-- Gradient Overlay for readability -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/50"
+    >
+    </div>
+  </div>
+
+  <!-- Shooting Stars Container -->
+  <div
+    id="star-container"
+    class="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+  >
+  </div>
+
+  <div
+    class="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+  >
+    <div class="hero-content text-white">
+      <div
+        class="hero-badge inline-flex items-center gap-2 py-1 px-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-indigo-100 text-sm font-medium mb-8"
+      >
+        <span class="w-2 h-2 rounded-full bg-[var(--color-secondary)]"></span>
+        {text.greeting}
+      </div>
+
+      <h1
+        class="hero-title text-4xl lg:text-5xl font-extrabold font-heading text-white mb-6 leading-[1.2]"
+      >
+        {text.title}
+      </h1>
+
+      <p
+        class="hero-text text-xl text-indigo-100/90 mb-10 max-w-lg leading-relaxed"
+      >
+        {text.subtitle}
+      </p>
+
+      <div class="hero-btns flex flex-wrap gap-4">
+        <a href={`/${lang}/projects`} class="btn-secondary">
+          {text.cta}
+        </a>
+        <a
+          href={`/${lang}/contact`}
+          class="px-8 py-3 rounded-full font-bold text-white border border-white/30 hover:bg-white/10 hover:border-white transition-all duration-300"
+        >
+          {text.contact}
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero Visual - 3D Scene -->
+    <div class="hidden lg:block hero-visual h-[500px] w-full">
+      <LaptopScene />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+
+  let cleanup;
+
+  document.addEventListener("astro:page-load", () => {
+    // 1. Cleanup previous instance if any
+    if (cleanup) cleanup();
+
+    const starContainer = document.getElementById("star-container");
+    const badge = document.querySelector(".hero-badge");
+
+    // Only run if we are on the hero page
+    if (!starContainer || !badge) return;
+
+    // --- Entrance Animation ---
+    const elements = {
+      badge: ".hero-badge",
+      title: ".hero-title",
+      text: ".hero-text",
+      btns: ".hero-btns",
+      visual: ".hero-visual",
+    };
+
+    gsap.set(Object.values(elements).join(","), { clearProps: "all" });
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      elements.badge,
+      { y: -20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, delay: 0.2 }
+    )
+      .fromTo(
+        elements.title,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1 },
+        "-=0.6"
+      )
+      .fromTo(
+        elements.text,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1 },
+        "-=0.8"
+      )
+      .fromTo(
+        elements.btns,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        "-=0.8"
+      )
+      .fromTo(
+        elements.visual,
+        { x: 50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2 },
+        "-=1"
+      );
+
+    // --- Shooting Stars Animation ---
+
+    const createStar = () => {
+      if (!document.body.contains(starContainer)) return;
+
+      const star = document.createElement("div");
+      // Subtle star style
+      star.className =
+        "absolute w-0.5 h-0.5 bg-white rounded-full shadow-[0_0_8px_1px_rgba(255,255,255,0.8)] opacity-0";
+
+      // Random position preference for top-right area to shoot diagonal down-left
+      // We start slightly off-screen or top right
+      const startX = Math.random() * window.innerWidth;
+      const startY = Math.random() * (window.innerHeight * 0.4); // Top 40% only
+
+      star.style.left = `${startX}px`;
+      star.style.top = `${startY}px`;
+
+      starContainer.appendChild(star);
+
+      // Shooting trajectory: move left and down
+      const duration = 2 + Math.random(); // 2-3s duration
+      const xDist = -200 - Math.random() * 200; // Move left 200-400px
+      const yDist = 200 + Math.random() * 100; // Move down 200-300px
+
+      const starTl = gsap.timeline({
+        onComplete: () => star.remove(),
+      });
+
+      starTl
+        .to(star, { opacity: 0.7, duration: 0.3, ease: "power1.out" }) // Fade in
+        .to(star, { x: xDist, y: yDist, duration: duration, ease: "none" }, "<") // Move
+        .to(star, { opacity: 0, duration: 0.3, ease: "power1.in" }, `>-0.3`); // Fade out at end
+    };
+
+    // Initial star after a short delay
+    gsap.delayedCall(1, createStar);
+
+    // Loop
+    const intervalId = setInterval(createStar, 3000);
+
+    // Define cleanup
+    cleanup = () => {
+      clearInterval(intervalId);
+      gsap.killTweensOf(starContainer); // Safety kill
+    };
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    if (cleanup) cleanup();
+  });
+</script>

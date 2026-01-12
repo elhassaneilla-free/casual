@@ -1,0 +1,89 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import Hero from "../../components/sections/Hero.astro";
+import Footer from "../../components/common/Footer.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
+}
+
+const { lang } = Astro.params;
+---
+
+<Layout title="Professional IT Portfolio" lang={lang}>
+  <Header lang={lang} />
+
+  <main>
+    <Hero lang={lang} />
+
+    <!-- Quick Access Section -->
+    <section class="py-24 bg-slate-50 relative z-10 -mt-20">
+      <div class="container-custom">
+        <div class="relative z-10">
+          <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2
+              class="text-3xl font-bold font-heading text-[var(--color-dark)] mb-4"
+            >
+              {lang === "fr" ? "Explorez mon parcours" : "Explore My Journey"}
+            </h2>
+            <p class="text-gray-500">
+              {
+                lang === "fr"
+                  ? "Naviguez à travers mes compétences, mes expériences et mes réalisations passées."
+                  : "Navigate through my skills, professional experience, and past achievements."
+              }
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {
+              [
+                {
+                  title: lang === "fr" ? "Compétences" : "Skills",
+                  link: "skills",
+                  gradient: "from-blue-500 to-cyan-400",
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-4 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+                },
+                {
+                  title: lang === "fr" ? "Expérience" : "Experience",
+                  link: "experience",
+                  gradient: "from-purple-500 to-pink-400",
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-4 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`,
+                },
+                {
+                  title: lang === "fr" ? "Projets" : "Projects",
+                  link: "projects",
+                  gradient: "from-orange-500 to-red-400",
+                  icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-4 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.1 4 0 4 0"></path><path d="M12 15v5s3.03-.55 4-2c1.1-1.62 0-4 0-4"></path></svg>`,
+                },
+              ].map((item) => (
+                <a
+                  href={`/${lang}/${item.link}`}
+                  data-astro-reload
+                  class="group relative p-8 rounded-3xl glass-card border border-white/50 hover:border-white hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2"
+                >
+                  <div class="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div class="relative z-10">
+                    <div class="icon-wrapper" set:html={item.icon} />
+                    <h3 class="text-2xl font-bold text-[var(--color-dark)] mb-2 group-hover:text-[var(--color-primary)] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p class="text-gray-500 text-sm font-medium flex items-center gap-2">
+                      {lang === "fr" ? "En savoir plus" : "Learn more"}
+                      <span class="group-hover:translate-x-1 transition-transform">
+                        →
+                      </span>
+                    </p>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</Layout>

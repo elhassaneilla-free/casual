@@ -1,0 +1,352 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import Footer from "../../components/common/Footer.astro";
+import Section from "../../components/common/Section.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "fr" } }];
+}
+
+const { lang } = Astro.params;
+const title = "Casual Portfolio";
+
+// Intro paragraph
+const introText =
+  lang === "fr"
+    ? "Ces projets représentent la mise en pratique de toutes les compétences que j'ai acquises au fil du temps. Chacun d'eux est une expérience stimulante où le savoir technique rencontre la créativité, transformant des idées en solutions numériques fonctionnelles et significatives."
+    : "These projects represent the practical forging of all the skills I have acquired over time. Each one is a challenging experience where technical knowledge meets creativity in application, transforming ideas into functional and meaningful digital solutions.";
+
+const projects = [
+  {
+    id: "p1",
+    title: { en: "Server Configuration", fr: "Configuration Serveur" },
+    image: "/p1.png",
+    technologies: ["Ubuntu", "Docker", "Nginx"],
+    shortDesc: {
+      en: "Setting up a whole environment for a time and location tracking application.",
+      fr: "Mise en place d'un environnement complet pour une application de suivi de temps et de localisation.",
+    },
+    longDesc: {
+      en: "This project features a robust infrastructure built on **Ubuntu**, utilizing **Docker** for containerization and **Nginx** as a high-performance web server. Designed for **SAHEL S.A.**, the system provides a reliable environment for tracking the working time and real-time locations of delivery vehicles and workers.",
+      fr: "Ce projet repose sur une infrastructure robuste sous **Ubuntu**, utilisant **Docker** pour la conteneurisation et **Nginx** comme serveur web haute performance. Conçu pour **SAHEL S.A.**, le système offre un environnement fiable pour le suivi du temps de travail et la localisation en temps réel des véhicules de livraison et des employés.",
+    },
+    link: null,
+  },
+  {
+    id: "p2",
+    title: { en: "Cake Shop Landing Page", fr: "Landing Page Pâtisserie" },
+    image: "/p2.png",
+    technologies: ["Angular", "HTML", "CSS"],
+    shortDesc: {
+      en: "A polished and sophisticated cake shop website.",
+      fr: "Un site web de pâtisserie raffiné et sophistiqué.",
+    },
+    longDesc: {
+      en: "Built with **Angular**, **HTML**, and **CSS**, this landing page prioritizes visual elegance and polish. It is a faithful implementation of a **Figma** design, created to showcase high-end confectionery with style.",
+      fr: "Construit avec **Angular**, **HTML**, et **CSS**, cette landing page privilégie l'élégance visuelle et les finitions. C'est une implémentation fidèle d'une maquette **Figma**, créée pour mettre en valeur la confiserie haut de gamme avec style.",
+    },
+    link: {
+      url: "https://www.figma.com/design/HtfmP2PFt3xhjARIziRlik/group-projects?node-id=0-1&p=f",
+      label: "Figma Preview",
+    },
+  },
+  {
+    id: "p3",
+    title: { en: "Restaurant Website", fr: "Site Web Restaurant" },
+    image: "/p3.png",
+    technologies: ["Angular", "HTML", "Tailwind CSS", "GSAP"],
+    shortDesc: {
+      en: "Building a very polished and beautiful Japanese sushi restaurant website.",
+      fr: "Création d'un site web de restaurant japonais très soigné et esthétique.",
+    },
+    longDesc: {
+      en: "At the core of this project lies **Angular**, enhanced by **Tailwind CSS** for layout and **GSAP** for buttery-smooth animations. This Japanese sushi restaurant website focuses on elegance, fluidity, and an immersive user experience.",
+      fr: "Au cœur de ce projet se trouve **Angular**, enrichi par **Tailwind CSS** pour la mise en page et **GSAP** pour des animations fluides. Ce site de restaurant japonais privilégie l'élégance, la fluidité et une expérience utilisateur immersive.",
+    },
+    link: {
+      url: "https://elhassaneilla-free.github.io/Hashirama/",
+      label: "Live Demo",
+    },
+  },
+  {
+    id: "p4",
+    title: { en: "Portfolio", fr: "Portfolio" },
+    image: "/my-small-world.jpg",
+    technologies: ["Astro", "Three.js"],
+    shortDesc: {
+      en: "Arguably the most artistic piece I managed to bring to reality.",
+      fr: "Probablement la pièce la plus artistique que j'ai réussi à concrétiser.",
+    },
+    longDesc: {
+      en: "This portfolio is built with **Astro** for optimal performance and structure, integrating **Three.js** for creative visual elements. Driven by personal imagination, it emphasizes cleanliness, originality, and identity. This first version stands as a statement that the work speaks for itself.",
+      fr: "Ce portfolio est construit avec **Astro** pour une performance et une structure optimales, intégrant **Three.js** pour des éléments visuels créatifs. Guidé par l'imagination personnelle, il met l'accent sur la pureté, l'originalité et l'identité. Cette première version est conçue pour laisser le travail parler de lui-même.",
+    },
+    link: null,
+  },
+  {
+    id: "p5",
+    title: { en: "MUSEUM (coming soon)", fr: "MUSEUM (bientôt)" },
+    image: "/p5.png",
+    technologies: [],
+    shortDesc: {
+      en: "",
+      fr: "",
+    },
+    longDesc: { en: "", fr: "" },
+    link: null,
+    isComingSoon: true,
+  },
+];
+---
+
+<Layout title={title} lang={lang}>
+  <Header lang={lang} />
+
+  <main class="pt-20">
+    <Section background="white">
+      <!-- Header Section -->
+      <div class="max-w-4xl mx-auto text-center mb-16 px-4">
+        <h1 class="text-4xl md:text-5xl font-bold font-heading mb-6" data-aos="fade-up">
+          {title}
+        </h1>
+        <p
+          class="text-lg md:text-xl text-gray-500 leading-relaxed max-w-3xl mx-auto"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          {introText}
+        </p>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          projects.map((project, index) => (
+            <div
+              class={`group rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full ${
+                project.isComingSoon ? "opacity-90" : ""
+              }`}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
+              <!-- Card Image -->
+              <div class="relative h-56 overflow-hidden bg-gray-100 group">
+                <img
+                  src={project.image}
+                  alt={lang === "fr" ? project.title.fr : project.title.en}
+                  class={`w-full h-full object-cover transform transition-transform duration-700 ${project.isComingSoon ? "grayscale group-hover:grayscale-0" : "group-hover:scale-105"}`}
+                  loading="lazy"
+                />
+                
+                {/* Overlay Area */}
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                   {!project.isComingSoon ? (
+                      <button 
+                        class="project-trigger px-6 py-2.5 rounded-full text-white font-medium tracking-wide backdrop-blur-md bg-white/10 border border-white/30 hover:bg-white/20 transition-all duration-300 transform scale-95 group-hover:scale-100"
+                        data-id={project.id}
+                      >
+                        {lang === "fr" ? "Lire plus" : "Read more"}
+                      </button>
+                   ) : (
+                      <span class="px-6 py-2.5 rounded-full text-white font-medium tracking-wide backdrop-blur-md bg-white/10 border border-white/30 cursor-default">
+                        {lang === "fr" ? "Bientôt disponible" : "Coming Soon"}
+                      </span>
+                   )}
+                </div>
+              </div>
+
+              <!-- Card Content -->
+              <div class="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                   {/* Tags */}
+                  <div class="flex flex-wrap gap-2 mb-4 h-6 overflow-hidden">
+                    {project.technologies.map((tag) => (
+                      <span class="px-2.5 py-0.5 bg-indigo-50 text-[var(--color-primary)] text-xs font-semibold rounded-md border border-indigo-100">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Title */}
+                  <h3 class="text-xl font-bold text-[var(--color-dark)] mb-2 group-hover:text-[var(--color-primary)] transition-colors line-clamp-1">
+                    {lang === "fr" ? project.title.fr : project.title.en}
+                  </h3>
+
+                  {/* Short Description */}
+                  <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                    {lang === "fr" ? project.shortDesc.fr : project.shortDesc.en}
+                  </p>
+                </div>
+
+                {/* Action Button */}
+                {!project.isComingSoon ? (
+                  <button
+                    class="project-trigger w-full mt-4 py-2 px-4 bg-gray-50 hover:bg-[var(--color-primary)] text-[var(--color-dark)] hover:text-white rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center gap-2 group/btn"
+                    data-id={project.id}
+                    aria-label={lang === "fr" ? "Lire plus" : "Read more"}
+                  >
+                   {lang === "fr" ? "Lire plus" : "Read more"}
+                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </button>
+                ) : (
+                   <div class="w-full mt-4 py-2 px-4 bg-gray-50 text-gray-400 rounded-lg text-sm font-medium text-center cursor-default uppercase tracking-wider text-xs">
+                    {lang === "fr" ? "Bientôt" : "Coming Soon"}
+                   </div>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Section>
+  </main>
+
+  <!-- Modal Container -->
+  <div
+    id="project-modal"
+    class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+  >
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+
+    <!-- Modal Content -->
+    <div class="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+      <div
+        class="bg-white w-full max-w-5xl h-auto max-h-[90vh] rounded-2xl shadow-2xl transform scale-95 opacity-0 transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row"
+        id="modal-panel"
+      >
+        <!-- Close Button -->
+        <button
+          id="modal-close"
+          class="absolute top-4 right-4 z-20 p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-500 hover:text-red-500 transition-colors backdrop-blur-md"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+
+        <!-- Dynamic Content injected here -->
+        <div id="modal-content" class="flex flex-col md:flex-row w-full h-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <Footer lang={lang} />
+</Layout>
+
+<script define:vars={{ projects, lang }}>
+  // Initialize function to handle setup on every page transition
+  function initProjects() {
+    const projectsData = projects;
+    const currentLang = lang;
+
+    // DOM Elements - Re-select on every run
+    const modal = document.getElementById("project-modal");
+    const modalPanel = document.getElementById("modal-panel");
+    const modalContent = document.getElementById("modal-content");
+    const backdrop = document.getElementById("modal-backdrop");
+    const closeBtn = document.getElementById("modal-close");
+    const triggers = document.querySelectorAll(".project-trigger");
+    
+    // Guard clause if we are not on the projects page (elements missing)
+    if (!modal || !triggers.length) return;
+
+    // Functions
+    function openModal(projectId) {
+      const project = projectsData.find((p) => p.id === projectId);
+      if (!project) return;
+
+      const title = currentLang === "fr" ? project.title.fr : project.title.en;
+      const desc = currentLang === "fr" ? project.longDesc.fr : project.longDesc.en;
+      
+      // Only render link if it exists
+      let linkHtml = "";
+      if (project.link) {
+          linkHtml = `
+              <a href="${project.link.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-[var(--color-primary)] text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/20">
+                  ${project.link.label}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+          `;
+      }
+
+      const html = `
+        <!-- Left: Image -->
+        <div class="relative h-64 md:h-auto md:w-1/2 bg-gray-100 shrink-0 min-h-[300px]">
+          <img src="${project.image}" alt="${title}" class="w-full h-full object-cover md:absolute md:inset-0" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+
+        <!-- Right: Content -->
+        <div class="flex-1 w-full bg-white p-8 md:p-12 flex flex-col justify-center">
+          <div>
+            <div class="flex flex-wrap gap-2 mb-6">
+                ${project.technologies.map(tech => `<span class="px-3 py-1 bg-indigo-50 text-[var(--color-primary)] text-sm font-semibold rounded-full border border-indigo-100">${tech}</span>`).join('')}
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-bold font-heading text-[var(--color-dark)] mb-6 leading-tight">${title}</h2>
+
+            <div class="prose prose-lg text-gray-600 leading-relaxed mb-8">
+                <p>${desc.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[var(--color-dark)]">$1</strong>')}</p>
+            </div>
+
+            ${linkHtml}
+          </div>
+        </div>
+      `;
+
+      modalContent.innerHTML = html;
+      
+      // Show Modal
+      modal.classList.remove("hidden");
+      // Small delay to allow display:block to apply before opacity transition
+      setTimeout(() => {
+          modal.classList.remove("opacity-0");
+          modalPanel.classList.remove("opacity-0", "scale-95");
+          modalPanel.classList.add("scale-100");
+      }, 10);
+      
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    function closeModal() {
+      modal.classList.add("opacity-0");
+      modalPanel.classList.remove("scale-100");
+      modalPanel.classList.add("opacity-0", "scale-95");
+      
+      setTimeout(() => {
+          modal.classList.add("hidden");
+          modalContent.innerHTML = "";
+      }, 300); // Match transition duration
+
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    // Event Listeners (ensure we don't duplicate if function runs twice, though strictly scoped vars prevent leak, clean addEventListener is safer but simple replacement works here)
+    triggers.forEach((btn) => {
+      // Remove old listener if any? Hard to do with anonymous func.
+      // But initProjects() runs on new DOM content usually.
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        openModal(id);
+      });
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    backdrop?.addEventListener("click", closeModal);
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+          closeModal();
+      }
+    });
+  }
+
+  // Run on initial load
+  initProjects();
+
+  // Run on view transition (astro:page-load)
+  document.addEventListener('astro:page-load', initProjects);
+</script>

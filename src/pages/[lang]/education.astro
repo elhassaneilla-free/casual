@@ -1,0 +1,174 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/common/Header.astro';
+import Footer from '../../components/common/Footer.astro';
+import Section from '../../components/common/Section.astro';
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'fr'}},
+  ];
+}
+
+const { lang } = Astro.params;
+const title = lang === 'fr' ? 'Éducation' : 'Education';
+const certTitle = 'Certifications';
+
+const education = [
+  {
+    institution: 'ISTA OUARZAZATE (BAC+2)',
+    year: '2022 – 2024',
+    en: 'Diploma in Digital Infrastructure, Networking and Systems.',
+    fr: 'Diplôme en infrastructures numériques, réseaux et systèmes.'
+  },
+  {
+    institution: 'Multidisciplinary Faculty of Ouarzazate',
+    year: '2021 – 2022',
+    en: 'First year in Mathematical Sciences and Computer Science (SMI).',
+    fr: 'Première année en sciences mathématiques et informatique (SMI).'
+  },
+  {
+    institution: 'Imam Ali High School (BAC)',
+    year: '2020 – 2021',
+    en: 'Baccalaureate in Physics and Chemistry.',
+    fr: 'Baccalauréat en sciences physiques et chimiques.'
+  },
+  {
+    institution: 'Ibn Alhaytham Technical High School',
+    year: '2017 – 2018',
+    en: 'First year Baccalaureate in Mathematical Sciences.',
+    fr: 'Première année du baccalauréat en sciences mathématiques.'
+  }
+];
+
+const certifications = [
+  {
+    title: 'COURSERA CERTIFICATIONS',
+    image: '/coursera.png',
+    url: 'https://www.coursera.org/account/accomplishments/professional-cert/22KXCVLYLWK4',
+    items: [
+      'Google IT Support Professional Certificate',
+      'Technical Support Fundamentals',
+      'The Bits and Bytes of Computer Networking',
+      'Operating Systems and You: Becoming a Power User',
+      'System Administration and IT Infrastructure Services',
+      'IT Security: Defense Against the Digital Dark Arts'
+    ]
+  },
+  {
+    title: 'CODECADEMY CERTIFICATIONS',
+    image: '/code.jpg',
+    url: 'https://www.codecademy.com/',
+    items: [
+      'Learn HTML',
+      'Learn CSS',
+      'Learn JavaScript',
+      'Learn TypeScript',
+      'Angular',
+      'Learn Git & GitHub'
+    ]
+  },
+  {
+    title: 'ALGORIUM ACADEMY × JOBINTECH',
+    image: '/job.png',
+    url: 'https://algorium.academy',
+    items: [
+      'Clear Communication',
+      'Oral Presentation Mastery',
+      'Front-end Angular Development'
+    ]
+  }
+];
+---
+
+<Layout title={title} lang={lang}>
+  <Header lang={lang} />
+  
+  <main class="pt-20">
+    <!-- Education Section -->
+    <Section background="white">
+      <h1 class="text-5xl font-bold font-heading mb-12" data-aos="fade-up">{title}</h1>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {education.map((item, index) => (
+          <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 group" data-aos="fade-up" data-aos-delay={index * 100}>
+            <div class="flex justify-between items-start mb-4">
+               <h3 class="text-xl font-bold text-[var(--color-dark)] group-hover:text-[var(--color-primary)] transition-colors">
+                 {item.institution}
+               </h3>
+               <span class="px-3 py-1 bg-gray-50 text-[var(--color-primary)] text-sm font-medium rounded-full border border-gray-100">
+                 {item.year}
+               </span>
+            </div>
+            
+            <div class="space-y-4">
+              <!-- English -->
+              <div class="relative pl-4 border-l-2 border-[var(--color-primary)]">
+                <p class="text-gray-800 font-medium leading-relaxed">
+                  {item.en}
+                </p>
+              </div>
+              
+              <!-- French -->
+              <div class="relative pl-4 border-l-2 border-gray-200">
+                <p class="text-gray-500 italic text-sm leading-relaxed">
+                  {item.fr}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <!-- Certifications Section -->
+    <Section background="gray">
+      <h2 class="text-5xl font-bold font-heading mb-12" data-aos="fade-up">{certTitle}</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {certifications.map((cert, index) => (
+          <a 
+            href={cert.url}
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="group block h-full"
+            data-aos="fade-up"
+            data-aos-delay={index * 100}
+          >
+            <div class="h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100 flex flex-col">
+              <!-- Image Container -->
+              <div class="h-48 w-full bg-white p-8 flex items-center justify-center border-b border-gray-50 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tr from-gray-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <img 
+                  src={cert.image} 
+                  alt={cert.title} 
+                  class="max-h-full w-auto object-contain transform group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
+              <!-- Content -->
+              <div class="p-8 flex-1 flex flex-col">
+                <h3 class="text-lg font-bold text-[var(--color-dark)] mb-6 group-hover:text-[var(--color-primary)] transition-colors flex items-center gap-2">
+                  {cert.title}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </h3>
+                
+                <ul class="space-y-3">
+                  {cert.items.map((item) => (
+                    <li class="flex items-start text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+                      <span class="mr-3 mt-1.5 w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity"></span>
+                      <span class="leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Section>
+  </main>
+  
+  <Footer lang={lang} />
+</Layout>

@@ -1,0 +1,109 @@
+---
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+
+const navItems = [
+  { href: `/${lang}`, label: lang === "fr" ? "Accueil" : "Home" },
+  { href: `/${lang}/about`, label: lang === "fr" ? "À propos" : "About" },
+  { href: `/${lang}/skills`, label: lang === "fr" ? "Compétences" : "Skills" },
+  {
+    href: `/${lang}/experience`,
+    label: lang === "fr" ? "Expérience" : "Experience",
+  },
+  {
+    href: `/${lang}/education`,
+    label: lang === "fr" ? "Éducation" : "Education",
+  },
+  { href: `/${lang}/projects`, label: lang === "fr" ? "Projets" : "Projects" },
+  // Contact is handled by CTA usually but good to have in nav
+];
+---
+
+<header
+  class="fixed top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-md bg-white/70 border-b border-gray-100/50"
+>
+  <div class="container-custom flex justify-between items-center h-20">
+    <!-- Logo -->
+    <a
+      href={`/${lang}`}
+      class="transition-transform hover:scale-105"
+      aria-label="Home"
+    >
+      <img
+        src="/logo.png"
+        alt="EL HASSANE ILLA Logo"
+        class="h-16 md:h-20 w-auto object-contain"
+      />
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            data-astro-reload
+            class="text-sm font-medium text-gray-600 hover:text-[var(--color-primary)] transition-colors relative group"
+          >
+            {item.label}
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-primary)] transition-all duration-300 group-hover:w-full" />
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-6">
+      <!-- Language Switcher -->
+      <a
+        href={lang === "en"
+          ? `/fr${Astro.url.pathname.replace(/^\/en/, "")}`
+          : `/en${Astro.url.pathname.replace(/^\/fr/, "")}`}
+        data-astro-reload
+        class="text-sm font-semibold hover:text-[var(--color-primary)] transition-colors uppercase"
+      >
+        <span
+          class={lang === "en"
+            ? "text-[var(--color-primary)]"
+            : "text-gray-400"}>EN</span
+        >
+        <span class="text-gray-300 mx-1">/</span>
+        <span
+          class={lang === "fr"
+            ? "text-[var(--color-primary)]"
+            : "text-gray-400"}>FR</span
+        >
+      </a>
+
+      <!-- CTA -->
+      <a
+        href={`/${lang}/contact`}
+        class="hidden sm:block btn-primary text-sm px-5 py-2.5 shadow-lg shadow-indigo-500/20"
+      >
+        {lang === "fr" ? "Me contacter" : "Contact Me"}
+      </a>
+
+      <!-- Mobile Menu Button (Placeholder) -->
+      <button class="md:hidden text-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><line x1="3" y1="12" x2="21" y2="12"></line><line
+            x1="3"
+            y1="6"
+            x2="21"
+            y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg
+        >
+      </button>
+    </div>
+  </div>
+</header>

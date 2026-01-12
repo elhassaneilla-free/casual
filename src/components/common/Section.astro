@@ -1,0 +1,23 @@
+---
+interface Props {
+  class?: string;
+  id?: string;
+  background?: 'white' | 'gray' | 'dark';
+}
+const { class: className = '', id, background = 'white' } = Astro.props;
+
+const bgMappings = {
+  white: 'bg-white',
+  gray: 'bg-[#f6f9fc]',
+  dark: 'bg-[var(--color-dark)] text-white'
+};
+
+const bgClass = bgMappings[background];
+---
+<section id={id} class={`relative section-padding overflow-hidden ${bgClass} ${className}`}>
+  <div class="container-custom relative z-10">
+    <slot />
+  </div>
+  
+  <slot name="background" />
+</section>

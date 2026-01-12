@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-heading: "Outfit", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    --color-primary: #635bff;
+    --color-secondary: #00d4ff;
+    --color-dark: #0a2540;
+    --color-text: #425466;
+    --color-bg: #f6f9fc;
+    --color-white: #ffffff;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  body {
+    font-family: var(--font-body);
+    @apply antialiased overflow-x-hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    color: var(--color-dark);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[var(--color-primary)] text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-1 block w-fit;
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--color-secondary)] text-[var(--color-dark)] px-6 py-3 rounded-full font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-1 block w-fit;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-20 lg:py-32;
+  }
+}
+
+/* Custom Gradients & Utilities */
+.bg-stripe-gradient {
+  background: radial-gradient(
+    circle at 10% 20%,
+    rgb(99, 91, 255) 0%,
+    rgb(31, 219, 219) 90%
+  );
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)];
+}
+
+.glass-card {
+  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl rounded-2xl; /* Increased visual fidelity */
+}

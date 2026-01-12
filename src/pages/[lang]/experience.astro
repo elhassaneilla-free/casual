@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/common/Header.astro';
+import Footer from '../../components/common/Footer.astro';
+import Section from '../../components/common/Section.astro';
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'fr'}},
+  ];
+}
+
+const { lang } = Astro.params;
+const isFr = lang === 'fr';
+const title = isFr ? 'Expérience Professionnelle' : 'Professional Experience';
+
+const experiences = [
+  {
+    en: {
+      role: "Trainee",
+      company: "Algoruim Academy × JobinTech",
+      description: "Working and studying inside an intensive bootcamp in order to acquire solid front-end development skills with Angular and many other technologies, through hackathons and real-world projects.",
+      date: "2025"
+    },
+    fr: {
+       role: "Stagiaire",
+       company: "Algoruim Academy × JobinTech",
+       description: "Participation à un bootcamp intensif combinant étude et pratique, visant l’acquisition de solides compétences en développement front-end avec Angular et plusieurs autres technologies, à travers des hackathons et des projets concrets.",
+       date: "2025"
+    }
+  },
+  {
+    en: {
+      role: "Sys Admin / IT Specialist / Help Desk",
+      company: "Sahel S.A",
+      description: "A very rich real-world experience that allowed me to acquire numerous technical skills in networking, systems administration, and security by executing large-scale projects, along with developing essential soft skills such as strong teamwork and effective issue-handling strategies.",
+      date: "2024 – 2025"
+    },
+    fr: {
+       role: "Administrateur systèmes / Spécialiste IT / Helpdesk",
+       company: "Sahel S.A",
+       description: "Une expérience professionnelle très riche qui m’a permis d’acquérir de nombreuses compétences techniques en réseaux, administration systèmes et sécurité à travers la réalisation de projets de grande envergure, ainsi que des compétences humaines telles que l’esprit d’équipe et la gestion efficace des incidents.",
+       date: "2024 – 2025"
+    }
+  },
+  {
+    en: {
+      role: "Trainee",
+      company: "ORMVAO",
+      description: "Contributing to the enhancement and improvement of a medium-scale IT infrastructure.",
+      date: "2024"
+    },
+    fr: {
+       role: "Stagiaire",
+       company: "ORMVAO",
+       description: "Contribution à l’amélioration et au renforcement d’une infrastructure informatique de taille moyenne.",
+       date: "2024"
+    }
+  }
+];
+---
+
+<Layout title={title} lang={lang}>
+  <Header lang={lang} />
+  
+  <main class="pt-20">
+    <Section background="gray">
+      <h1 class="text-5xl font-bold font-heading mb-12 text-center animate-fade-in">{title}</h1>
+      
+      <div class="max-w-4xl mx-auto space-y-8">
+        {experiences.map((exp, index) => {
+          const content = isFr ? exp.fr : exp.en;
+          return (
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 relative pl-8 group animate-fade-in-up" style={`animation-delay: ${index * 150}ms`}>
+              <!-- Decoration Line -->
+              <div class="absolute left-0 top-6 bottom-6 w-1 bg-[var(--color-primary)] rounded-r-full transform scale-y-90 group-hover:scale-y-100 transition-transform origin-left"></div>
+              
+              <div class="flex flex-col md:flex-row justify-between md:items-start mb-4 gap-4">
+                 <div>
+                   <h3 class="text-2xl font-bold text-[var(--color-dark)] group-hover:text-[var(--color-primary)] transition-colors">{content.role}</h3>
+                   <p class="text-lg text-indigo-500 font-medium">{content.company}</p>
+                 </div>
+                 <span class="text-gray-500 font-medium bg-gray-50 px-4 py-1.5 rounded-full text-sm whitespace-nowrap self-start">
+                   {content.date}
+                 </span>
+              </div>
+              
+              <p class="text-gray-600 leading-relaxed text-lg">
+                {content.description}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </Section>
+  </main>
+  
+  <Footer lang={lang} />
+</Layout>
