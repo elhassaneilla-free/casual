@@ -18,14 +18,32 @@ const title = isFr ? 'Expérience Professionnelle' : 'Professional Experience';
 const experiences = [
   {
     en: {
+      role: "IT Officer",
+      company: "ACWA Operations",
+      url: "https://acwapower.com/en/what-we-do/projects/nooro-iii-noor-ouarzazate-iii/",
+      description: "Higher-level user support in a highly critical industrial environment using JIRA, in addition to managing highly complex systems such as Palo Alto, SonicWall, Cisco, Grandstream, Egnyte, etc.",
+      date: "2026"
+    },
+    fr: {
+       role: "IT Officer",
+       company: "ACWA Operations",
+       url: "https://acwapower.com/en/what-we-do/projects/nooro-iii-noor-ouarzazate-iii/",
+       description: "Support utilisateur de niveau supérieur dans un environnement industriel hautement critique à l’aide de JIRA, ainsi que la gestion de systèmes hautement complexes tels que Palo Alto, SonicWall, Cisco, Grandstream, Egnyte, etc.",
+       date: "2026"
+    }
+  },
+  {
+    en: {
       role: "Trainee",
       company: "Algoruim Academy × JobinTech",
+      url: "https://algorium.academy/program/jit-fe-angular-developer",
       description: "Working and studying inside an intensive bootcamp in order to acquire solid front-end development skills with Angular and many other technologies, through hackathons and real-world projects.",
       date: "2025"
     },
     fr: {
        role: "Stagiaire",
        company: "Algoruim Academy × JobinTech",
+       url: "https://algorium.academy/program/jit-fe-angular-developer",
        description: "Participation à un bootcamp intensif combinant étude et pratique, visant l’acquisition de solides compétences en développement front-end avec Angular et plusieurs autres technologies, à travers des hackathons et des projets concrets.",
        date: "2025"
     }
@@ -34,12 +52,14 @@ const experiences = [
     en: {
       role: "Sys Admin / IT Specialist / Help Desk",
       company: "Sahel S.A",
+      url: "https://sahelvolaille.ma/",
       description: "A very rich real-world experience that allowed me to acquire numerous technical skills in networking, systems administration, and security by executing large-scale projects, along with developing essential soft skills such as strong teamwork and effective issue-handling strategies.",
       date: "2024 – 2025"
     },
     fr: {
        role: "Administrateur systèmes / Spécialiste IT / Helpdesk",
        company: "Sahel S.A",
+       url: "https://sahelvolaille.ma/",
        description: "Une expérience professionnelle très riche qui m’a permis d’acquérir de nombreuses compétences techniques en réseaux, administration systèmes et sécurité à travers la réalisation de projets de grande envergure, ainsi que des compétences humaines telles que l’esprit d’équipe et la gestion efficace des incidents.",
        date: "2024 – 2025"
     }
@@ -79,7 +99,20 @@ const experiences = [
               <div class="flex flex-col md:flex-row justify-between md:items-start mb-4 gap-4">
                  <div>
                    <h3 class="text-2xl font-bold text-[var(--color-dark)] group-hover:text-[var(--color-primary)] transition-colors">{content.role}</h3>
-                   <p class="text-lg text-indigo-500 font-medium">{content.company}</p>
+                   <p class="text-lg text-indigo-500 font-medium">
+                     {content.url ? (
+                       <a
+                         href={content.url}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         class="hover:underline hover:text-indigo-600 transition-colors"
+                       >
+                         {content.company}
+                       </a>
+                     ) : (
+                       content.company
+                     )}
+                   </p>
                  </div>
                  <span class="text-gray-500 font-medium bg-gray-50 px-4 py-1.5 rounded-full text-sm whitespace-nowrap self-start">
                    {content.date}

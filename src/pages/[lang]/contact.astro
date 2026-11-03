@@ -9,141 +9,179 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const title = lang === "fr" ? "Contact" : "Contact Me";
+const isFr = lang === "fr";
+const title = isFr ? "Contact" : "Contact Me";
+const description = isFr
+  ? "Contactez EL HASSANE ILLA directement par WhatsApp, e-mail ou LinkedIn."
+  : "Contact EL HASSANE ILLA directly via WhatsApp, email, or LinkedIn.";
+
+const subtitle = isFr
+  ? "Vous avez un projet en tête ? Parlons-en ! Contactez-moi directement via l'un des canaux ci-dessous."
+  : "Have a project in mind? Let's talk about it. Reach out directly through any of the channels below.";
+
+const contactMethods = [
+  {
+    id: "whatsapp",
+    name: isFr ? "Téléphone / WhatsApp" : "Phone / WhatsApp",
+    value: "+212 708-402942",
+    detail: isFr ? "Disponible pour messages et appels" : "Available for chat and calls",
+    href: "https://wa.me/212708402942",
+    action: isFr ? "Discuter sur WhatsApp" : "Chat on WhatsApp",
+    external: true,
+    hoverBorder: "hover:border-[#25D366]",
+    iconBg: "bg-emerald-50 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white",
+    actionText: "group-hover:text-[#25D366]",
+    ariaLabel: isFr
+      ? "Contacter EL HASSANE ILLA sur WhatsApp au +212 708-402942"
+      : "Contact EL HASSANE ILLA on WhatsApp at +212 708-402942",
+  },
+  {
+    id: "email",
+    name: isFr ? "E-mail" : "Email",
+    value: "elhassaneilla@gmail.com",
+    detail: isFr ? "Réponse rapide garantie" : "Prompt reply guaranteed",
+    href: "mailto:elhassaneilla@gmail.com",
+    action: isFr ? "Envoyer un e-mail" : "Send an email",
+    external: false,
+    hoverBorder: "hover:border-[var(--color-primary)]",
+    iconBg: "bg-indigo-50 text-[var(--color-primary)] group-hover:bg-[var(--color-primary)] group-hover:text-white",
+    actionText: "group-hover:text-[var(--color-primary)]",
+    ariaLabel: isFr
+      ? "Envoyer un e-mail à elhassaneilla@gmail.com"
+      : "Send an email to elhassaneilla@gmail.com",
+  },
+  {
+    id: "linkedin",
+    name: "LinkedIn",
+    value: "EL HASSANE ILLA",
+    detail: "/in/el-hassane-illa-5b7129295",
+    href: "https://www.linkedin.com/in/el-hassane-illa-5b7129295/",
+    action: isFr ? "Se connecter sur LinkedIn" : "Connect on LinkedIn",
+    external: true,
+    hoverBorder: "hover:border-[#0077b5]",
+    iconBg: "bg-sky-50 text-[#0077b5] group-hover:bg-[#0077b5] group-hover:text-white",
+    actionText: "group-hover:text-[#0077b5]",
+    ariaLabel: isFr
+      ? "Consulter le profil LinkedIn de EL HASSANE ILLA"
+      : "Visit EL HASSANE ILLA's LinkedIn profile",
+  },
+];
 ---
 
-<Layout title={title} lang={lang}>
+<Layout title={title} description={description} lang={lang}>
   <Header lang={lang} />
 
   <main class="pt-20">
-    <Section background="white">
-      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <h1 class="text-5xl font-bold font-heading mb-6">{title}</h1>
-          <p class="text-xl text-gray-500 mb-8">
-            {
-              lang === "fr"
-                ? "Vous avez un projet en tête ? Parlons-en !"
-                : "Have a project in mind? Let's talk about it."
-            }
+    <Section background="gray" class="min-h-[calc(100vh-5rem)] flex items-center">
+      <div class="max-w-5xl mx-auto w-full">
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
+          <h1 class="text-4xl sm:text-5xl font-bold font-heading text-[var(--color-dark)] mb-4 animate-fade-in">
+            {title}
+          </h1>
+          <p class="text-lg sm:text-xl text-gray-500 leading-relaxed animate-fade-in">
+            {subtitle}
           </p>
-
-          <div class="space-y-6">
-            <div class="flex items-center gap-4">
-              <div
-                class="w-12 h-12 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center text-[var(--color-primary)]"
-              >
-                <svg
-                  class="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <p class="text-sm text-gray-500">Email</p>
-                <p class="font-medium text-[var(--color-dark)]">
-                  elhassaneilla@gmail.com
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-4">
-              <div
-                class="w-12 h-12 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center text-[var(--color-primary)]"
-              >
-                <svg
-                  class="h-6 w-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <p class="text-sm text-gray-500">Phone</p>
-                <p class="font-medium text-[var(--color-dark)]">
-                  +212708402942
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div class="glass-card p-8 bg-gray-50">
-          <form
-            name="contact"
-            method="POST"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-            class="space-y-4"
-          >
-            <input type="hidden" name="form-name" value="contact" />
-            <input type="hidden" name="bot-field" />
-            <div>
-              <label
-                for="name"
-                class="block text-sm font-medium text-gray-700 mb-1"
+        <!-- Contact Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+          {
+            contactMethods.map((method) => (
+              <a
+                href={method.href}
+                target={method.external ? "_blank" : undefined}
+                rel={method.external ? "noopener noreferrer" : undefined}
+                aria-label={method.ariaLabel}
+                class={`group relative flex flex-col justify-between p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 ${method.hoverBorder}`}
               >
-                {lang === "fr" ? "Nom" : "Name"}
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
-                placeholder="John Doe"
-                required
-              />
-            </div>
+                <!-- Top Row: Icon & Link Indicator -->
+                <div>
+                  <div class="flex items-center justify-between mb-6">
+                    <div
+                      class={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${method.iconBg}`}
+                    >
+                      {method.id === "whatsapp" && (
+                        <svg
+                          class="h-7 w-7"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        </svg>
+                      )}
+                      {method.id === "email" && (
+                        <svg
+                          class="h-7 w-7"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" />
+                        </svg>
+                      )}
+                      {method.id === "linkedin" && (
+                        <svg
+                          class="h-7 w-7"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      )}
+                    </div>
 
-            <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
-                placeholder="john@example.com"
-                required
-              />
-            </div>
+                    <span class="text-gray-300 group-hover:text-gray-600 transition-colors">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M7 17L17 7M17 7H7M17 7V17"
+                        />
+                      </svg>
+                    </span>
+                  </div>
 
-            <div>
-              <label
-                for="message"
-                class="block text-sm font-medium text-gray-700 mb-1"
-              >
-                {lang === "fr" ? "Message" : "Message"}
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows="4"
-                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
-                placeholder="Hello..."
-                required></textarea>
-            </div>
+                  <!-- Method Name & Value -->
+                  <h2 class="text-xs font-semibold tracking-wider uppercase text-gray-400 mb-1">
+                    {method.name}
+                  </h2>
+                  <p class="text-lg font-bold text-[var(--color-dark)] group-hover:text-[var(--color-primary)] transition-colors break-words">
+                    {method.value}
+                  </p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    {method.detail}
+                  </p>
+                </div>
 
-            <button
-              type="submit"
-              class="w-full btn-primary justify-center text-center"
-            >
-              {lang === "fr" ? "Envoyer" : "Send Message"}
-            </button>
-          </form>
+                <!-- Bottom Action Prompt -->
+                <div class="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <span
+                    class={`text-sm font-semibold text-gray-600 transition-colors flex items-center gap-1.5 ${method.actionText}`}
+                  >
+                    <span>{method.action}</span>
+                  </span>
+                  <span class={`text-sm font-bold text-gray-400 transition-colors ${method.actionText}`}>
+                    &rarr;
+                  </span>
+                </div>
+              </a>
+            ))
+          }
         </div>
       </div>
     </Section>
