@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/common/Header.astro";
 import Hero from "../../components/sections/Hero.astro";
+import TechMarquee from "../../components/common/TechMarquee.astro";
 import Footer from "../../components/common/Footer.astro";
 
 export function getStaticPaths() {
@@ -16,6 +17,7 @@ const { lang } = Astro.params;
 
   <main>
     <Hero lang={lang} />
+    <TechMarquee lang={lang} />
 
     <!-- Quick Access Section -->
     <section class="py-24 bg-slate-50 relative z-10 -mt-20">
